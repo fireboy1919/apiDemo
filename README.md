@@ -38,15 +38,14 @@ That package will then be a runnable jar (available using "java -jar [jarname]" 
 
 Which will include everything needed apart from Java itself, and will run on port 8080 by default.
 
-
 # The API
 
 - / (Get)  - The root path is an array of the names of all metrics that have been added.
 
 Other than that path, all of the other paths return the current mean, median, min, and max of the metric that they return.
 
-- /{metricname} (Get) - gets the mean, median, min, and max of the metric at metricname in JSON format.
-- /{metricname} (Post) - creates a new metric named metricname.  It's stored in an unordered set, so worst case will be O(N) to store a new metric, but average case is O(1), so in practice, it's worth it.  If the metric already exists, it is simply returned.
+- /{metricname} (Get) - gets the mean, median, min, and max of the metric at metricname in JSON format in O(1) time.
+- /{metricname} (Post) - creates a new metric named metricname.  It's stored in an unordered set, so worst case will be O(N) over the number of metrics to store a new metric, but average case is O(1), so in practice, it's worth it.  If the metric already exists, it is simply returned.
 - /{metricname}/add/{value} (Put) - puts a new value into a metric.  The value is stored in a double, so has that resolution.  This operation will take O(log2(N)) time for each metric, and will store the data in a tree (so should take O(N) storage space). 
 All of these take O(1) time:
 
