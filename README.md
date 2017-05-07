@@ -45,10 +45,12 @@ Which will include everything needed apart from Java itself, and will run on por
 
 Other than that path, all of the other paths return the current mean, median, min, and max of the metric that they return.
 
-- /{metricname} (Get) - gets the mean, median, min, and max of the metric at metricname.  If this metric does not exist, it will throw an exception.  
+- /{metricname} (Get) - gets the mean, median, min, and max of the metric at metricname in JSON format.
 - /{metricname} (Post) - creates a new metric named metricname.  It's stored in an unordered set, so worst case will be O(N) to store a new metric, but average case is O(1), so in practice, it's worth it.  If the metric already exists, it is simply returned.
 - /{metricname}/add/{value} (Put) - puts a new value into a metric.  The value is stored in a double, so has that resolution.  This operation will take O(log2(N)) time for each metric, and will store the data in a tree (so should take O(N) storage space). 
 All of these take O(1) time:
+
+## Individual metrics are available for use in applications that can't or don't want to parse JSON:
 - /{metricname}/mean (Get) - Returns the mean in decimal form.
 - /{metricname}/median (Get) - Returns the median in decimal form.
 - /{metricname}/min (Get) - Returns the min in decimal form.
