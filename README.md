@@ -33,7 +33,11 @@ More specific directions are available here:  http://docs.spring.io/spring-boot/
 
 ```mvn package```
 
-That package will then be a runnable jar under target/
+That package will then be a runnable jar (available using "java -jar [jarname]" with a jarname define by the pattern 
+  /target/apiDemo-[VERSION]-SNAPSHOT.jar
+
+Which will include everything needed apart from Java itself, and will run on port 8080 by default.
+
 
 # The API
 
