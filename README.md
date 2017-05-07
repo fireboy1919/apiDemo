@@ -2,8 +2,8 @@
 
 This is a simple demonstration of creating a metric api using a Spring Web/Spring Boot package.
 This particular design requires linear insertion of data with no chunking (batch inserting a lot of data points at once)
-in exchange for not having on-demand metrics that are always computed.  
-This is best suited for streaming data, rather than data from a log file.
+in exchange for having on-demand metrics that are always computed.
+This approach is best suited for streaming data, rather than data from a log file.
 
 Dependencies:
  - Java 8
