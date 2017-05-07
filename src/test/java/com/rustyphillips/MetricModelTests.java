@@ -13,13 +13,14 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ApiDemoApplicationTests {
+public class MetricModelTests {
 
 	@Autowired
 	private MetricRepository repo;
 	
 	@Test
 	public void testHappyPath() {
+		repo.clear();
 		repo.put("test");
 		repo.addValue("test", 1D);
 		repo.addValue("test", 2D);
@@ -27,8 +28,8 @@ public class ApiDemoApplicationTests {
 		Metric m = repo.get("test");
 		assertEquals(1D, m.getMin(), 0);
 		assertEquals(2D, m.getMax(), 0);
-		assertEquals(1.5D, m.getMedian(), 0);
 		assertEquals(1.5D, m.getMean(), 0);
+		assertEquals(1.5D, m.getMedian(), 0);
 	}
 	
 	@Test

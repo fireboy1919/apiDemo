@@ -29,6 +29,7 @@ public class Metric {
 		
 		// First element should be retrievable in O(1) time because it should be the root element.
 		this.minHeap = Collections.synchronizedSortedSet(new TreeSet<Double>( Comparator.<Double>reverseOrder() ));
+		this.mean = 0D;
 	}
 	
 	// Sets the min and max values, and adds the value to the list.
@@ -44,25 +45,27 @@ public class Metric {
 	
 	// Takes O(log2(N)) time in exchange for increased complexity.
 	private void findNewMedian(double newVal) {
-		if(this.maxHeap.size() == 0)
-		{
-			this.maxHeap.add(newVal);
-			return; 
-		}
-		if(this.maxHeap.first() >= newVal) 
-			this.minHeap.add(newVal);
-		else
-			this.maxHeap.add(newVal);
-	
-		if(Math.abs(this.maxHeap.size() - this.minHeap.size()) > 1)
-		{
-			if(this.maxHeap.size() > this.minHeap.size()){
-				this.minHeap.add(this.maxHeap.first());
-				this.maxHeap.remove(this.maxHeap.first());
-			} else 
-			{
-				this.maxHeap.add(this.minHeap.first());
-				this.minHeap.remove(this.minHeap.first());
+		// Locking both because essentially all operations depend on this part being atomic.
+		synchronized (this.minHeap) {
+			synchronized (this.maxHeap) {
+				if (this.maxHeap.size() == 0) {
+					this.maxHeap.add(newVal);
+					return;
+				}
+				if (this.maxHeap.first() >= newVal)
+					this.minHeap.add(newVal);
+				else
+					this.maxHeap.add(newVal);
+
+				if (Math.abs(this.maxHeap.size() - this.minHeap.size()) > 1) {
+					if (this.maxHeap.size() > this.minHeap.size()) {
+						this.minHeap.add(this.maxHeap.first());
+						this.maxHeap.remove(this.maxHeap.first());
+					} else {
+						this.maxHeap.add(this.minHeap.first());
+						this.minHeap.remove(this.minHeap.first());
+					}
+				}
 			}
 		}
 	}
@@ -73,11 +76,12 @@ public class Metric {
 		return this.maxHeap.size() + this.minHeap.size();
 	}
 	
-	// Takes O(1) time in exchange for having floating point errors.
+	// Takes O(1) time in exchange for having floating point error accumulation.  
+	// For almost all cases, this is not a statistically significant problem for Java's FP implementation..
 	//  Assumes that size() is an O(1) operation 
 	// (otherwise, the order of this is whatever order that is).
 	private void findNewMean( double newVal ) {
-		this.mean = (this.mean * ( this.size() - 1) + newVal) / this.size();
+			this.mean = (this.mean * ( this.size() - 1) + newVal) / this.size();
 	}
 	
 	/*

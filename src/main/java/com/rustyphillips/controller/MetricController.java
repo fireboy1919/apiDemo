@@ -21,22 +21,43 @@ public class MetricController {
 	MetricRepository repo;
 	
 	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
-	public Metric getMetricStats(@PathVariable String name, ModelMap model) {
+	public Metric getMetricStats(@PathVariable String name) {
 		return repo.get(name); 
 	}
 	
-	@RequestMapping(value = "/{name}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{name}", method = RequestMethod.POST)
 	public @ResponseBody Metric addMetric(@PathVariable String name) {
 		return repo.put(name);
 	}
 	
-	@RequestMapping(value = "/{name}/{value}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{name}/median", method = RequestMethod.GET)
+	public @ResponseBody double getMedian(@PathVariable String name) {
+		return repo.get(name).getMedian();
+	}
+	
+	@RequestMapping(value = "/{name}/mean", method = RequestMethod.GET)
+	public @ResponseBody double getMean(@PathVariable String name) {
+		return repo.get(name).getMean();
+	}
+	
+	@RequestMapping(value = "/{name}/min", method = RequestMethod.GET)
+	public @ResponseBody double getMin(@PathVariable String name) {
+		return repo.get(name).getMin();
+	}
+	
+	@RequestMapping(value = "/{name}/max", method = RequestMethod.GET)
+	public @ResponseBody double getMax(@PathVariable String name) {
+		return repo.get(name).getMax();
+	}
+	
+	
+	@RequestMapping(value = "/{name}/add/{value}", method = RequestMethod.PUT)
 	public @ResponseBody Metric addValue(@PathVariable String name, @PathVariable double value) {
 		return repo.addValue(name, value);
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public @ResponseBody Set<String> getDefault(ModelMap model) {
+	public @ResponseBody Set<String> getDefault() {
 		return repo.getNames(); 
 	}
 

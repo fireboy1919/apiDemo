@@ -1,6 +1,8 @@
 package com.rustyphillips.repository;
 
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -17,10 +19,10 @@ import com.rustyphillips.model.Metric;
 @Service
 @Scope("singleton")
 public class MetricRepository  {
-	HashMap<String,Metric> metrics;
+	Map<String,Metric> metrics;
 	
 	public MetricRepository() {
-		this.metrics = new HashMap<String, Metric>();
+		this.metrics = new ConcurrentHashMap<String, Metric>();
 	}
 	
 	public Metric get(String name) {
@@ -54,5 +56,9 @@ public class MetricRepository  {
 	
 	public Set<String> getNames() {
 		return this.metrics.keySet();
+	}
+	
+	public void clear() {
+		this.metrics.clear();
 	}
 }
